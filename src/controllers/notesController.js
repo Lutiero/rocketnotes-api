@@ -30,7 +30,7 @@ class NotesController {
 
     await knex("links").insert(linksInserted)
 
-    response.json()
+    return response.json()
   }
 
   async show(request, response) {
@@ -40,7 +40,7 @@ class NotesController {
     const tags = await knex("tags").where("note_id", id).orderBy("name")
     const links = await knex("links").where("note_id", id).orderBy("created_at")
 
-    response.json({
+    return response.json({
       ...note,
       tags,
       links,
@@ -52,10 +52,10 @@ class NotesController {
     const deletedNotes = await knex("notes").where("id", id).delete()
 
     if (!deletedNotes) {
-      response.status(404).json()
+      return response.status(404).json()
     }
 
-    response.status(200).json()
+    return response.status(200).json()
   }
 
   async index(request, response) {
@@ -80,7 +80,7 @@ class NotesController {
         .orderBy("created_at", "desc")
 
       if (notes.length === 0) {
-        response.status(404).json()
+        return response.status(404).json()
       }
     }
 
@@ -93,7 +93,7 @@ class NotesController {
       }
     })
 
-    response.json(notesWithTags)
+    return response.json(notesWithTags)
   }
 }
 
